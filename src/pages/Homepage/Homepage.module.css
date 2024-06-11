@@ -3,10 +3,10 @@
 }
 
 .card-container {
-    padding: 1rem 0.5rem 1rem 0.5rem;
+    padding: 2rem 0.5rem 1rem 2rem;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    gap: 8px;
+    gap: 1rem;
     flex-wrap: wrap;
 }
