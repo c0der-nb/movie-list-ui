@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './Navbar.module.css';
 
-function Navbar({placeholder}) {
+function Navbar({input}) {
     return (
         <div className={styles.wrapper}>
-            <input type='text' className={styles.search} placeholder='Search for your favourite movies' />
+            <input onChange={input} type='text' className={styles.search} placeholder='Search for your favourite movies' />
         </div>
     )
 }

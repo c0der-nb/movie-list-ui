@@ -7,7 +7,8 @@ import { getMovieList, searchMovie } from '../../api/api';
 function Homepage() {
     const [movieList, setMovieList] = useState([]);
     const [pageCount, setPageCount] = useState(1);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [timer, setTimer] = useState();
 
     const nextHandler = () => {
         setPageCount((count) => count+1);
@@ -19,12 +20,47 @@ function Homepage() {
         }
     }
 
-    const loadData = () => {
-        setIsLoading(true);
-        getMovieList(pageCount).then((data) => setMovieList(data.results))
-                               .catch((err) => console.log(err));
-        setIsLoading(false);
+    const loadData = async () => {
+        try {
+            setIsLoading(true);
+            const data = await getMovieList(pageCount);
+            setMovieList(data.results);
+            setIsLoading(false);
+        }
+        catch (e) {
+            setIsLoading(false);
+            console.error(e);
+        }
     }
+
+    const search = async (movie) => {
+        try {
+            setIsLoading(true);
+            if (!movie)
+                loadData();
+            else {
+            const data = await searchMovie(movie);
+            setMovieList(data.results);
+            setIsLoading(false);
+            }
+        }
+        catch (e) {
+            setIsLoading(false);
+            console.error(e);
+        }
+    }
+
+    const handlerSearchInput = (e) => {
+        setIsLoading(true);
+        const timer = setTimeout(() => {
+            search(e.target.value);
+        }, 1000)
+        setTimer(timer);
+    }
+
+    useEffect(() => {
+        return () => clearTimeout(timer);
+    }, [timer])
 
     useEffect(() => {
         loadData();
@@ -33,7 +69,7 @@ function Homepage() {
     return (
         <div className={styles.wrapper}>
             <div className={styles.navbar}>
-                <Navbar />
+                <Navbar input={handlerSearchInput} />
             </div>
             {!isLoading ?
             <div className={styles['card-container']}>
