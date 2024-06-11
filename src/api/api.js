@@ -2,9 +2,6 @@ import axios from 'axios';
 
 const API_ENDPOINT = "https://api.themoviedb.org/3";
 
-// for search -> search/movie/?query=
-// for discover -> discover/movie/?query=
-
 export const getMovieList = async (page) => {
     try {
         const params = {

@@ -9,6 +9,7 @@ function Homepage() {
     const [pageCount, setPageCount] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
     const [timer, setTimer] = useState();
+    const [searchText, setSearchText] = useState('');
 
     const nextHandler = () => {
         setPageCount((count) => count+1);
@@ -39,9 +40,9 @@ function Homepage() {
             if (!movie)
                 loadData();
             else {
-            const data = await searchMovie(movie);
-            setMovieList(data.results);
-            setIsLoading(false);
+                const data = await searchMovie(movie, pageCount);
+                setMovieList(data.results);
+                setIsLoading(false);
             }
         }
         catch (e) {
@@ -52,8 +53,10 @@ function Homepage() {
 
     const handlerSearchInput = (e) => {
         setIsLoading(true);
+        setPageCount(1);
+        setSearchText(e.target.value);
         const timer = setTimeout(() => {
-            search(e.target.value);
+            search(searchText);
         }, 1000)
         setTimer(timer);
     }
@@ -63,7 +66,10 @@ function Homepage() {
     }, [timer])
 
     useEffect(() => {
-        loadData();
+        if (searchText)
+            search(searchText);
+        else
+            loadData();
     }, [pageCount]);
 
     return (
