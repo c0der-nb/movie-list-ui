@@ -55,10 +55,14 @@ function Homepage() {
         setIsLoading(true);
         setPageCount(1);
         setSearchText(e.target.value);
-        const timer = setTimeout(() => {
-            search(searchText);
-        }, 1000)
-        setTimer(timer);
+        if (e.target.value.length === 0)
+            loadData();
+        else {
+            const timer = setTimeout(() => {
+                search(e.target.value);
+            }, 1000)
+            setTimer(timer);
+        }
     }
 
     useEffect(() => {
@@ -66,7 +70,7 @@ function Homepage() {
     }, [timer])
 
     useEffect(() => {
-        if (searchText)
+        if (searchText.length > 0)
             search(searchText);
         else
             loadData();
